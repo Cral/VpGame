@@ -38,7 +38,9 @@ void AVpPawn::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	PrimaryWeapon = GetWorld()->SpawnActor<AVpBaseWeapon>( PrimaryWeaponClass, FVector::ZeroVector, FRotator::ZeroRotator );
-	PrimaryWeapon->GetRootComponent()->AttachTo( RootComponent, NAME_None, EAttachLocation::SnapToTarget );
+	PrimaryWeapon->SetActorLocation( GetActorLocation() + PrimaryWeapon->GetPositionOffset() );
+	PrimaryWeapon->GetRootComponent()->AttachTo( RootComponent, NAME_None, EAttachLocation::KeepWorldPosition );
+	PrimaryWeapon->Initialize( ShipMeshComponent );
 }
 
 void AVpPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
@@ -57,8 +59,6 @@ void AVpPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 void AVpPawn::Tick(float DeltaSeconds)
 {
 	Move( DeltaSeconds );
-
-	//FireShot();
 }
 
 void AVpPawn::Move( float DeltaSeconds )
@@ -88,11 +88,3 @@ void AVpPawn::Move( float DeltaSeconds )
 		}
 	}
 }
-
-//void AVpPawn::FireShot()
-//{
-	//if (bCanFire == true && bIsFiring == true)
-	//{
-	//	PrimaryWeapon->TryFiring();
-	//}
-//}

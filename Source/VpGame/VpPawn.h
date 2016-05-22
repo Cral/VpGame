@@ -25,21 +25,9 @@ class AVpPawn : public APawn
 public:
 	AVpPawn();
 
-	/** Offset from the ships location to spawn projectiles */
-	//UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite )
-	//FVector GunOffset;
-	
-	/* How fast the weapon will fire */
-	//UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-	//float FireRate;
-
 	/* The speed our ship moves around the level */
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	float MoveSpeed;
-
-	/** Sound to play each time we fire */
-	//UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
-	//class USoundBase* FireSound;
 
 	// Begin Actor Interface
 	virtual void PostInitializeComponents() override;
@@ -50,12 +38,6 @@ public:
 
 	void Move( float DeltaSeconds );
 	void FireShot();
-
-	/* Handler for the fire timer expiry */
-	//void ShotTimerExpired();
-
-	//void FirePrimaryWeaponStart();
-	//void FirePrimaryWeaponStop();
 
 	// Static names for axis bindings
 	static const FName MoveForwardBinding;
@@ -68,15 +50,6 @@ protected:
 	TSubclassOf<class AVpBaseWeapon> PrimaryWeaponClass;
 
 private:
-
-	/* Flag to control firing  */
-	//uint32 bCanFire : 1;
-
-	uint32 bIsFiring : 1;
-
-	/** Handle for efficient management of ShotTimerExpired timer */
-	//FTimerHandle TimerHandle_ShotTimerExpired;
-
 	class AVpBaseWeapon* PrimaryWeapon;
 
 public:

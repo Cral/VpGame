@@ -22,6 +22,23 @@ AVpBaseWeapon::AVpBaseWeapon()
 	bCanFire = true;
 }
 
+void AVpBaseWeapon::Initialize(UStaticMeshComponent* ShipMesh)
+{
+	UWorld* World = GetWorld();
+
+	if( World )
+	{
+		for( auto SocketName : BarrelSocketNames )
+		{
+			//UStaticMeshSocket const * BarrelSocket = ShipMesh->GetSocketByName( SocketName );
+			//AActor* Barrel = World->SpawnActor<AActor>();
+			AActor* Barrel = World->SpawnActor<AActor>( BarrelClass );
+			Barrel->AttachRootComponentTo( ShipMesh, SocketName, EAttachLocation::SnapToTarget );
+			Barrels.Add( Barrel );
+		}
+	}
+}
+
 void AVpBaseWeapon::Tick( float DeltaSeconds )
 {
 	TryFiring();
@@ -43,19 +60,29 @@ void AVpBaseWeapon::TryFiring()
 
 	if( bCanFire == true && bIsFiring == true )
 	{
-		const FVector SpawnLocation = GetActorLocation() + FVector( 90.f, 0.f, 0.f );
-
 		UWorld* const World = GetWorld();
-		if( World != NULL )
+		if( World )
 		{
-			AVpProjectile* Projectile = World->SpawnActor<AVpProjectile>( ProjectileClass, SpawnLocation, FRotator::ZeroRotator );
-		}
+			if( Barrels.Num() > 0 )
+			{
 
-		World->GetTimerManager().SetTimer( TimerHandle_ShotTimerExpired, this, &AVpBaseWeapon::ShotTimerExpired, FireRate );
+				AActor* Barrel = Barrels[BarrelIndex];
+				AVpProjectile* Projectile = World->SpawnActor<AVpProjectile>( ProjectileClass, Barrel->GetActorLocation(), Barrel->GetActorRotation() );
 
-		if( FireSound != nullptr )
-		{
-			UGameplayStatics::PlaySoundAtLocation( this, FireSound, GetActorLocation() );
+				World->GetTimerManager().SetTimer( TimerHandle_ShotTimerExpired, this, &AVpBaseWeapon::ShotTimerExpired, FireRate );
+
+				if( FireSound != nullptr )
+				{
+					UGameplayStatics::PlaySoundAtLocation( this, FireSound, GetActorLocation() );
+				}
+
+				++BarrelIndex;
+				if( BarrelIndex >= Barrels.Num() ) BarrelIndex = 0;
+			}
+			else
+			{
+				//Log no barrels error.
+			}
 		}
 
 		bCanFire = false;

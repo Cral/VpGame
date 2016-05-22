@@ -32,5 +32,13 @@ void AVpProjectile::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FV
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 20.0f, GetActorLocation());
 	}
 
+	if( OtherActor && OtherActor->Tags.Contains( "BadDude" ) )
+	{
+		FDamageEvent DamageEvent( DamageTypeClass );
+
+		const float DamageAmount = 60.0f;
+		OtherActor->TakeDamage( DamageAmount, DamageEvent, NULL, this );
+	}
+
 	Destroy();
 }

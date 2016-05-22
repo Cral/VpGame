@@ -14,29 +14,46 @@ class AVpBaseWeapon : public AActor
 public:
 	AVpBaseWeapon();
 
+	void Initialize( UStaticMeshComponent* ShipMesh );
+
 	void OnStartFiring();
 	void OnStopFiring();
 
 	virtual void Tick( float DeltaSeconds ) override;
 
+	const FVector& GetPositionOffset() { return PositionOffset; }
+
 protected:
 	void ShotTimerExpired();
 	void TryFiring();
 
-	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true") )
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = (AllowPrivateAccess = "true") )
 	UStaticMeshComponent* WeaponMesh;
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Weapon )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	TSubclassOf<class AVpProjectile> ProjectileClass;
 
-	UPROPERTY( Category = Audio, EditAnywhere, BlueprintReadWrite )
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	TSubclassOf<class AActor> BarrelClass;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Audio )
 	class USoundBase* FireSound;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	TArray<FName> BarrelSocketNames;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	float FireRate;
 
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
+	FVector PositionOffset;
+
 	bool bIsFiring = false;
 	bool bCanFire = true;
+
+	int32 BarrelIndex = 0;
+
+	TArray<AActor*> Barrels;
 
 	FTimerHandle TimerHandle_ShotTimerExpired;
 };

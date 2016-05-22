@@ -25,5 +25,8 @@ public:
 
 	FORCEINLINE UStaticMeshComponent* GetProjectileMesh() const { return ProjectileMesh; }
 	FORCEINLINE UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Damage )
+	TSubclassOf<class UDamageType> DamageTypeClass;
 };
 
