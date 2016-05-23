@@ -40,10 +40,8 @@ public:
 	void FireShot();
 
 	// Static names for axis bindings
-	static const FName MoveForwardBinding;
+	static const FName MoveUpBinding;
 	static const FName MoveRightBinding;
-	static const FName FireForwardBinding;
-	static const FName FireRightBinding;
 
 protected:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Weapon )

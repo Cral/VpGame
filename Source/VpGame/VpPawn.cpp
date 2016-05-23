@@ -5,10 +5,8 @@
 #include "VpBaseWeapon.h"
 #include "TimerManager.h"
 
-const FName AVpPawn::MoveForwardBinding("MoveForward");
+const FName AVpPawn::MoveUpBinding("MoveUp");
 const FName AVpPawn::MoveRightBinding("MoveRight");
-const FName AVpPawn::FireForwardBinding("FireForward");
-const FName AVpPawn::FireRightBinding("FireRight");
 
 AVpPawn::AVpPawn()
 {	
@@ -47,10 +45,8 @@ void AVpPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	check(InputComponent);
 
-	InputComponent->BindAxis(MoveForwardBinding);
+	InputComponent->BindAxis(MoveUpBinding);
 	InputComponent->BindAxis(MoveRightBinding);
-	InputComponent->BindAxis(FireForwardBinding);
-	InputComponent->BindAxis(FireRightBinding);
 
 	InputComponent->BindAction( "FirePrimaryWeapon", IE_Pressed, PrimaryWeapon, &AVpBaseWeapon::OnStartFiring );
 	InputComponent->BindAction( "FirePrimaryWeapon", IE_Released, PrimaryWeapon, &AVpBaseWeapon::OnStopFiring );
@@ -64,11 +60,11 @@ void AVpPawn::Tick(float DeltaSeconds)
 void AVpPawn::Move( float DeltaSeconds )
 {
 	// Find movement direction
-	const float ForwardValue = GetInputAxisValue( MoveForwardBinding );
+	const float UpValue = GetInputAxisValue( MoveUpBinding );
 	const float RightValue = GetInputAxisValue( MoveRightBinding );
 
 	// Clamp max size so that (X=1, Y=1) doesn't cause faster movement in diagonal directions
-	const FVector MoveDirection = FVector( ForwardValue, RightValue, 0.f ).GetClampedToMaxSize( 1.0f );
+	const FVector MoveDirection = FVector( 0.f, RightValue, UpValue ).GetClampedToMaxSize( 1.0f );
 
 	// Calculate  movement
 	const FVector Movement = MoveDirection * MoveSpeed * DeltaSeconds;
