@@ -66,21 +66,30 @@ void AVpPawn::Move( float DeltaSeconds )
 	// Clamp max size so that (X=1, Y=1) doesn't cause faster movement in diagonal directions
 	const FVector MoveDirection = FVector( 0.f, RightValue, UpValue ).GetClampedToMaxSize( 1.0f );
 
+	const FVector RotateDirection = FVector( 1.0f, RightValue, UpValue ).GetClampedToMaxSize( 1.0f );
+
 	// Calculate  movement
 	const FVector Movement = MoveDirection * MoveSpeed * DeltaSeconds;
 
+	const FRotator TargetRotation = MoveDirection.Rotation();// Movement.Rotation();
+	FRotator NewRotation = FMath::Lerp( GetActorRotation(), TargetRotation, 0.05f );
+	NewRotation.Pitch = FMath::ClampAngle(NewRotation.Pitch, -30.0f, 30.0f);
+	NewRotation.Yaw = FMath::ClampAngle(NewRotation.Yaw, -30.0f, 30.0f);
+
 	// If non-zero size, move this actor
-	if( Movement.SizeSquared() > 0.0f )
-	{
-		const FRotator NewRotation = Movement.Rotation();
+	//if( Movement.SizeSquared() > 0.0f )
+	//{
+		
 		FHitResult Hit( 1.f );
-		bool Move = RootComponent->MoveComponent( Movement, FRotator( 0.0f, 0.0f, 0.0f ), true, &Hit );
+		bool Move = RootComponent->MoveComponent( Movement, NewRotation, true, &Hit );
 
 		if( Hit.IsValidBlockingHit() )
 		{
 			const FVector Normal2D = Hit.Normal.GetSafeNormal2D();
 			const FVector Deflection = FVector::VectorPlaneProject( Movement, Normal2D ) * (1.f - Hit.Time);
-			RootComponent->MoveComponent( Deflection, FRotator( 0.0f, 0.0f, 0.0f ), true );
+			RootComponent->MoveComponent( Deflection, NewRotation, true );
 		}
-	}
+	//}
+
+	
 }
