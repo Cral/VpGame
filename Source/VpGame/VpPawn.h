@@ -26,8 +26,14 @@ public:
 	AVpPawn();
 
 	/* The speed our ship moves around the level */
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Movement, EditAnywhere, BlueprintReadWrite)
 	float MoveSpeed;
+
+	UPROPERTY(Category = Movement, EditAnywhere, BlueprintReadWrite)
+	float StrafeSpeed;
+
+	UPROPERTY(Category = Movement, EditAnywhere, BlueprintReadWrite)
+	float ClimbSpeed;
 
 	// Begin Actor Interface
 	virtual void PostInitializeComponents() override;
@@ -37,7 +43,6 @@ public:
 	// End Actor Interface
 
 	void Move( float DeltaSeconds );
-	void FireShot();
 
 	// Static names for axis bindings
 	static const FName MoveUpBinding;
@@ -54,8 +59,7 @@ public:
 	/** Returns ShipMeshComponent subobject **/
 	FORCEINLINE class UStaticMeshComponent* GetShipMeshComponent() const { return ShipMeshComponent; }
 	/** Returns CameraComponent subobject **/
-	FORCEINLINE class UCameraComponent* GetCameraComponent() const { return CameraComponent; }
+	//FORCEINLINE class UCameraComponent* GetCameraComponent() const { return CameraComponent; }
 	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	//FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 };
-
