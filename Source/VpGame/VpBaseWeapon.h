@@ -14,7 +14,7 @@ class AVpBaseWeapon : public AActor
 public:
 	AVpBaseWeapon();
 
-	void Initialize( UStaticMeshComponent* ShipMesh );
+	void Initialize( UStaticMeshComponent* ShipMesh, class AVpPawn* MyPawnIn );
 
 	void OnStartFiring();
 	void OnStopFiring();
@@ -56,5 +56,7 @@ protected:
 	TArray<AActor*> Barrels;
 
 	FTimerHandle TimerHandle_ShotTimerExpired;
+
+	class AVpPawn* MyPawn;
 };
 

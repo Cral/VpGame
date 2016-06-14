@@ -1,6 +1,7 @@
 #include "VpGame.h"
 #include "VpBaseWeapon.h"
 #include "VpProjectile.h"
+#include "VpPawn.h"
 
 AVpBaseWeapon::AVpBaseWeapon()
 {
@@ -22,8 +23,9 @@ AVpBaseWeapon::AVpBaseWeapon()
 	bCanFire = true;
 }
 
-void AVpBaseWeapon::Initialize(UStaticMeshComponent* ShipMesh)
+void AVpBaseWeapon::Initialize(UStaticMeshComponent* ShipMesh, AVpPawn* MyPawnIn)
 {
+	MyPawn = MyPawnIn;
 	UWorld* World = GetWorld();
 
 	if( World )
@@ -56,9 +58,9 @@ void AVpBaseWeapon::OnStopFiring()
 
 void AVpBaseWeapon::TryFiring()
 {
-	const FVector FireDirection = FVector( 1.0f, 0.0f, 0.0f );
+	const FVector FireDirection = MyPawn->GetAimDirection();
 
-	if( bCanFire == true && bIsFiring == true )
+	if( bCanFire == true && bIsFiring == true && FireDirection.Size() > 0.f )
 	{
 		UWorld* const World = GetWorld();
 		if( World )
@@ -67,7 +69,7 @@ void AVpBaseWeapon::TryFiring()
 			{
 
 				AActor* Barrel = Barrels[BarrelIndex];
-				AVpProjectile* Projectile = World->SpawnActor<AVpProjectile>( ProjectileClass, Barrel->GetActorLocation(), Barrel->GetActorRotation() );
+				AVpProjectile* Projectile = World->SpawnActor<AVpProjectile>( ProjectileClass, Barrel->GetActorLocation(), FireDirection.Rotation() );
 
 				World->GetTimerManager().SetTimer( TimerHandle_ShotTimerExpired, this, &AVpBaseWeapon::ShotTimerExpired, FireRate );
 

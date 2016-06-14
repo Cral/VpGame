@@ -30,10 +30,13 @@ public:
 	float MoveSpeed;
 
 	UPROPERTY(Category = Movement, EditAnywhere, BlueprintReadWrite)
-	float StrafeSpeed;
+	float RotateSpeed;
 
 	UPROPERTY(Category = Movement, EditAnywhere, BlueprintReadWrite)
-	float ClimbSpeed;
+	float MoveAreaWidth;
+
+	UPROPERTY(Category = Movement, EditAnywhere, BlueprintReadWrite)
+	float MoveAreaHeight;
 
 	// Begin Actor Interface
 	virtual void PostInitializeComponents() override;
@@ -43,10 +46,14 @@ public:
 	// End Actor Interface
 
 	void Move( float DeltaSeconds );
+	const FVector GetAimDirection() const;
 
 	// Static names for axis bindings
 	static const FName MoveUpBinding;
 	static const FName MoveRightBinding;
+
+	static const FName AimUpBinding;
+	static const FName AimRightBinding;
 
 protected:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Weapon )
@@ -54,6 +61,8 @@ protected:
 
 private:
 	class AVpBaseWeapon* PrimaryWeapon;
+
+	FVector AimDirection;
 
 public:
 	/** Returns ShipMeshComponent subobject **/

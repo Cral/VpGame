@@ -1,9 +1,18 @@
 /Intermediate
+
 /Saved
+
 /Binaries
+
 /.vs
+
 /Content/StarterContent
 
+
 *.db
+
 *.opendb
+
 *.sln
+*.suo
+*.sdf

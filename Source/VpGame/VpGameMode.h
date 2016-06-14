@@ -4,7 +4,6 @@
 #include "GameFramework/GameMode.h"
 #include "VpGameMode.generated.h"
 
-
 UCLASS(minimalapi)
 class AVpGameMode : public AGameMode
 {
