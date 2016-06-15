@@ -1,13 +1,13 @@
 #pragma once
 
-#include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
 #include "VpEnemy.generated.h"
 
 //class UProjectileMovementComponent;
 class UStaticMeshComponent;
 
 UCLASS(config=Game)
-class AVpEnemy : public AActor
+class AVpEnemy : public APawn
 {
 	GENERATED_BODY()
 
