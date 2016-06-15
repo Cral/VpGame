@@ -12,7 +12,7 @@ AVpBaseWeapon::AVpBaseWeapon()
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>( TEXT( "WeaponMesh0" ) );
 	WeaponMesh->SetStaticMesh( WeaponMeshAsset.Object );
-	WeaponMesh->AttachTo( RootComponent );
+	WeaponMesh->AttachToComponent( RootComponent, FAttachmentTransformRules::KeepRelativeTransform );
 	WeaponMesh->BodyInstance.SetCollisionProfileName( "Weapon" );
 	RootComponent = WeaponMesh;
 
