@@ -4,6 +4,7 @@
 #include "VpPawn.h"
 #include "VpBaseWeapon.h"
 #include "TimerManager.h"
+#include "Kismet/KismetMathLibrary.h"
 
 const FName AVpPawn::MoveUpBinding("MoveUp");
 const FName AVpPawn::MoveRightBinding("MoveRight");
@@ -88,22 +89,29 @@ void AVpPawn::Move( float DeltaSeconds )
 		// Calculate  movement
 		FVector Movement = InputDirection * MoveSpeed * DeltaSeconds;
 
-		//FRotator TargetRotation = InputDirection.Rotation();// Movement.Rotation();
+		FRotator TargetRotation = InputDirection.Rotation();
+
+		if( AimDirection.Size() > 0 )
+		{
+			TargetRotation = AimDirection.Rotation();// Movement.Rotation();
+		}
+
 		//TargetRotation.Pitch = FMath::ClampAngle(TargetRotation.Pitch, -30.0f, 30.0f);
 		//TargetRotation.Yaw = FMath::ClampAngle(TargetRotation.Yaw, -30.0f, 30.0f);
 		//FRotator NewRotation = FMath::Lerp( GetActorRotation(), TargetRotation, 0.05f );
+		FRotator NewRotation = UKismetMathLibrary::RLerp( GetActorRotation(), TargetRotation, 0.05f, true );
 
 		//NewRotation.Pitch = FMath::ClampAngle(NewRotation.Pitch, -30.0f, 30.0f);
 		//NewRotation.Yaw = FMath::ClampAngle(NewRotation.Yaw, -30.0f, 30.0f);
 
 		FHitResult Hit(1.f);
-		bool Move = RootComponent->MoveComponent(Movement, GetActorRotation(), true, &Hit);
+		bool Move = RootComponent->MoveComponent(Movement, NewRotation, true, &Hit);
 
 		if (Hit.IsValidBlockingHit())
 		{
 			const FVector Normal2D = Hit.Normal.GetSafeNormal2D();
 			const FVector Deflection = FVector::VectorPlaneProject(Movement, Normal2D) * (1.f - Hit.Time);
-			RootComponent->MoveComponent(Deflection, GetActorRotation(), true);
+			RootComponent->MoveComponent(Deflection, NewRotation, true);
 		}
 
 		//CameraBoom->SetWorldLocation(FVector(GetActorLocation().X, 0.f, 500.f));
