@@ -40,5 +40,14 @@ void AVpProjectile::OnHit(UPrimitiveComponent* SomeComp, AActor* OtherActor, UPr
 		OtherActor->TakeDamage( DamageAmount, DamageEvent, NULL, this );
 	}
 
+	UWorld* World = GetWorld();
+
+	if( ImpactEffect != nullptr && World )
+	{
+		UParticleSystemComponent* Impact = UGameplayStatics::SpawnEmitterAtLocation( World, ImpactEffect, Hit.ImpactPoint );
+		FAttachmentTransformRules ImpactRules = FAttachmentTransformRules( EAttachmentRule::KeepRelative, true );
+		Impact->AttachToComponent( OtherComp, ImpactRules );
+	}
+
 	Destroy();
 }

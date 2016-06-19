@@ -32,8 +32,6 @@ void AVpBaseWeapon::Initialize(UStaticMeshComponent* ShipMesh, AVpPawn* MyPawnIn
 	{
 		for( auto SocketName : BarrelSocketNames )
 		{
-			//UStaticMeshSocket const * BarrelSocket = ShipMesh->GetSocketByName( SocketName );
-			//AActor* Barrel = World->SpawnActor<AActor>();
 			AActor* Barrel = World->SpawnActor<AActor>( BarrelClass );
 			Barrel->AttachRootComponentTo( ShipMesh, SocketName, EAttachLocation::SnapToTarget );
 			Barrels.Add( Barrel );
@@ -60,34 +58,42 @@ void AVpBaseWeapon::TryFiring()
 {
 	const FVector FireDirection = MyPawn->GetAimDirection();
 
-	if( bCanFire == true && bIsFiring == true && FireDirection.Size() > 0.f )
+	if( bCanFire == true )
 	{
-		UWorld* const World = GetWorld();
-		if( World )
+		if( bIsFiring == true )
 		{
-			if( Barrels.Num() > 0 )
+			if( FireDirection.Size() > 0.f )
 			{
+				Fire( FireDirection );
 
-				AActor* Barrel = Barrels[BarrelIndex];
-				AVpProjectile* Projectile = World->SpawnActor<AVpProjectile>( ProjectileClass, Barrel->GetActorLocation(), FireDirection.Rotation() );
-
-				World->GetTimerManager().SetTimer( TimerHandle_ShotTimerExpired, this, &AVpBaseWeapon::ShotTimerExpired, FireRate );
-
-				if( FireSound != nullptr )
-				{
-					UGameplayStatics::PlaySoundAtLocation( this, FireSound, GetActorLocation() );
-				}
-
-				++BarrelIndex;
-				if( BarrelIndex >= Barrels.Num() ) BarrelIndex = 0;
-			}
-			else
-			{
-				//Log no barrels error.
+				bCanFire = false;
 			}
 		}
+	}
+}
 
-		bCanFire = false;
+void AVpBaseWeapon::Fire( const FVector& FireDirection )
+{
+
+}
+
+const AActor* const AVpBaseWeapon::GetNextBarrel()
+{
+	AActor* Barrel = Barrels[BarrelIndex];
+
+	++BarrelIndex;
+	if( BarrelIndex >= Barrels.Num() ) BarrelIndex = 0;
+
+	return Barrel;
+}
+
+void AVpBaseWeapon::SpawnMuzzleEffect( UWorld* World, const AActor* const Barrel )
+{
+	if( MuzzleEffect != nullptr )
+	{
+		UParticleSystemComponent* MuzzleFlash = UGameplayStatics::SpawnEmitterAtLocation( World, MuzzleEffect, Barrel->GetActorLocation() );
+		FAttachmentTransformRules MuzzleRules = FAttachmentTransformRules( EAttachmentRule::KeepRelative, true );
+		MuzzleFlash->AttachToComponent( Barrel->GetRootComponent(), MuzzleRules );
 	}
 }
 

@@ -1,8 +1,8 @@
 {
-	"Changelist" : 3005592,
-	"BuildId" : "1551d030-ba42-43e1-a2af-301cc491a6df",
+	"Changelist" : 3013449,
+	"BuildId" : "b067b225-50ba-4373-9d39-7435f3ae5aba",
 	"Modules" : 
 	{
-		"VpGame" : "UE4Editor-VpGame-1244.dll"
+		"VpGame" : "UE4Editor-VpGame.dll"
 	}
 }

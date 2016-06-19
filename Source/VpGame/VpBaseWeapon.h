@@ -3,7 +3,6 @@
 #include "GameFramework/Actor.h"
 #include "VpBaseWeapon.generated.h"
 
-class UProjectileMovementComponent;
 class UStaticMeshComponent;
 
 UCLASS( config = Game )
@@ -18,26 +17,30 @@ public:
 
 	void OnStartFiring();
 	void OnStopFiring();
+	void ShotTimerExpired();
 
 	virtual void Tick( float DeltaSeconds ) override;
 
 	const FVector& GetPositionOffset() { return PositionOffset; }
 
 protected:
-	void ShotTimerExpired();
 	void TryFiring();
+	virtual void Fire( const FVector& FireDirection );
+
+	const AActor* const GetNextBarrel();
+	void SpawnMuzzleEffect( UWorld* World, const AActor* const Barrel );
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly, Category = Gameplay, meta = (AllowPrivateAccess = "true") )
 	UStaticMeshComponent* WeaponMesh;
-
-	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
-	TSubclassOf<class AVpProjectile> ProjectileClass;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	TSubclassOf<class AActor> BarrelClass;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Audio )
 	class USoundBase* FireSound;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Effects)
+	class UParticleSystem* MuzzleEffect;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Gameplay )
 	TArray<FName> BarrelSocketNames;

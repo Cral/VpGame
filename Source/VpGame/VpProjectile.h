@@ -28,5 +28,8 @@ public:
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Damage )
 	TSubclassOf<class UDamageType> DamageTypeClass;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = Effects )
+	class UParticleSystem* ImpactEffect;
 };
 

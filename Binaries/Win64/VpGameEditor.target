@@ -2,13 +2,13 @@
 	"TargetName" : "VpGameEditor",
 	"Platform" : "Win64",
 	"Configuration" : "Development",
-	"BuildId" : "1551d030-ba42-43e1-a2af-301cc491a6df",
+	"BuildId" : "b067b225-50ba-4373-9d39-7435f3ae5aba",
 	"Version" : 
 	{
 		"MajorVersion" : 4,
 		"MinorVersion" : 12,
-		"PatchVersion" : 2,
-		"Changelist" : 3005592,
+		"PatchVersion" : 3,
+		"Changelist" : 3013449,
 		"IsLicenseeVersion" : 0,
 		"BranchName" : "++UE4+Release-4.12"
 	},
